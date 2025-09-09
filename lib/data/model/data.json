@@ -1,0 +1,39 @@
+{
+    "amount": 10000,
+    "duration": 12,
+    "rate": 0.05,
+    "loanPlan": "644b1a187914d3c132c200a0",
+    "creditScore": 700,
+    "incomeType": "Salary",
+    "employmentType": "Full-time",
+    "status": "Pending",
+    "metadata": {
+        "monthlyIncome": 50000,
+        "nextOfKinDetails": {
+            "nextOfKinFullName": "Glory Olaifa",
+            "nextOfKinPhoneNumber": "08012345678",
+            "nextOfKinRelationship": "Sister",
+            "nextOfKinAddress": "123 Main St, Lagos"
+        },
+        "garantorDetails": {
+            "garantorFullName": "John Doe",
+            "garantorPhoneNumber": "08087654321",
+            "garantorEmailAddress": "Friend",
+            "garantorAddress": "456 Elm St, Abuja"
+        }
+    },
+    "startDate": "2024-05-03T12:00:00.000Z",
+    "endDate": "2025-05-03T12:00:00.000Z"
+}
+{
+    "savingsPlan": "5ebac534954b54139806c112",
+    "savingsCategory": "5ebac534954b54139806c1c4",
+    "amount": 10000,
+    "metadata": {
+        "title": "My Savings",
+        "savingsFrequency": "Monthly",
+        "savingsDayOfTheWeek": "Monday",
+        "savingsDuration": 1,
+        "savingstime": "2:00",
+    }
+}

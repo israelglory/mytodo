@@ -1,0 +1,46 @@
+import 'package:get_it/get_it.dart';
+import 'package:mytodo/core/services/dialog_service.dart';
+
+import 'package:mytodo/data/repo/user_repo.dart';
+
+import '../../data/datasources/local/locals.dart';
+import '../cores.dart';
+import '../services/image_services.dart';
+import '../services/snackbar_service.dart';
+
+final locator = GetIt.instance;
+
+Future<void> setupLocator() async {
+  locator.registerLazySingleton<NavigationService>(() => NavigationService());
+  locator.registerLazySingleton<SnackbarService>(() => SnackbarService());
+  locator.registerLazySingleton<BottomSheetService>(() => BottomSheetService());
+  locator.registerLazySingleton<ImagePickerService>(() => ImagePickerService());
+  locator.registerLazySingleton<DialogService>(() => DialogService());
+
+  //STORAGES
+  locator.registerLazySingleton(() => AuthLocalStorage());
+  locator.registerLazySingleton(() => AppLocalStorage());
+  //GLOBALS
+  locator.registerLazySingleton(() => AppGlobals.instance);
+
+  //REPOS
+
+  locator.registerLazySingleton(() => UserRepo());
+}
+
+//GLOBALS
+AppGlobals appGlobals = locator.get<AppGlobals>();
+
+NavigationService navigationService = locator.get<NavigationService>();
+SnackbarService snackbarService = locator.get<SnackbarService>();
+BottomSheetService bottomSheetService = locator.get<BottomSheetService>();
+ImagePickerService imageService = locator.get<ImagePickerService>();
+DialogService dialogService = locator.get<DialogService>();
+
+//STORAGES
+AuthLocalStorage authLocalStorage = locator.get<AuthLocalStorage>();
+AppLocalStorage appLocalStorage = locator.get<AppLocalStorage>();
+
+//REPOS
+
+UserRepo userRepo = locator.get<UserRepo>();
