@@ -8,50 +8,47 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Row(
-        children: [
-          SizedBox(
-            height: 30,
-            child: CircleAvatar(
-              backgroundImage: AssetImage(AppAssets.userProfilePNG),
-            ),
+    return Row(
+      children: [
+        SizedBox(
+          height: 30,
+          child: CircleAvatar(
+            backgroundImage: AssetImage(AppAssets.userProfilePNG),
           ),
-          SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const AppText(
-                    'Hello ',
+        ),
+        SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const AppText(
+                  'Hello ',
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+                Flexible(
+                  child: AppText(
+                    toBeginningOfSentenceCase("Glory"),
                     fontSize: 16,
                     color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Flexible(
-                    child: AppText(
-                      toBeginningOfSentenceCase("Glory"),
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              const AppText(
-                '...let\'s smash your goals today',
-                fontSize: 12,
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
-              ),
-            ],
-          ),
-        ],
-      ),
+                ),
+              ],
+            ),
+            const AppText(
+              '...let\'s smash your goals today',
+              fontSize: 12,
+              color: Colors.black,
+              fontStyle: FontStyle.italic,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

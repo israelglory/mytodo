@@ -99,12 +99,12 @@ class TaskView extends StatelessWidget {
                         model.selectedIndex == 0 ? 'ongoing' : "completed",
                       )[index];
                       return TaskTile(
-                        taskName: "Complete Flutter project",
-                        dateTime: "Today, 2:30 PM",
-                        category: "Work",
-                        description:
-                            "Finish the task management app with all features.",
-                        isCompleted: false,
+                        taskName: task.title,
+                        dateTime: task.formattedDueDate.toString(),
+                        category: task.category,
+                        description: task.description,
+
+                        isCompleted: task.isCompleted,
                         categoryColor: Colors.blue,
                         categoryIcon: Icons.work,
                         onTap: () {},

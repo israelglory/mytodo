@@ -161,7 +161,9 @@ class TaskViewModel extends BaseViewModel {
         isCompleted: isCompleted,
         completedAt: isCompleted ? DateTime.now() : null,
       );
-      notifyListeners();
+      Future.delayed(const Duration(milliseconds: 300), () {
+        notifyListeners();
+      });
     }
   }
 

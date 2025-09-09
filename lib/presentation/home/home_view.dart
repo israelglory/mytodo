@@ -16,51 +16,51 @@ class HomeView extends StatelessWidget {
       viewModelBuilder: () => HomeViewmodel(),
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
-          child: Column(
-            spacing: 16.0,
-            children: [
-              HomeHeader(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    spacing: 16,
-                    children: [
-                      ///Carosel
-                      CarouselWidget(
-                        quotes: model.quotes,
-                        onPageChanged: (index, reason) {
-                          model.setCarouselIndex(index);
-                        },
-                      ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              spacing: 16.0,
+              children: [
+                HomeHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        ///Carosel
+                        CarouselWidget(
+                          quotes: model.quotes,
+                          onPageChanged: (index, reason) {
+                            model.setCarouselIndex(index);
+                          },
+                        ),
 
-                      //Services
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: AppText(
+                        //Services
+                        AppText(
                           "Today's List",
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      TaskTile(
-                        taskName: "Complete Flutter project",
-                        dateTime: "Today, 2:30 PM",
-                        category: "Work",
-                        description:
-                            "Finish the task management app with all features.",
-                        isCompleted: false,
-                        categoryColor: Colors.blue,
-                        categoryIcon: Icons.work,
-                        onTap: () {},
-                        onStatusChanged: (completed) {},
-                      ),
-                    ],
+                        TaskTile(
+                          taskName: "Complete Flutter project",
+                          dateTime: "Today, 2:30 PM",
+                          category: "Work",
+                          description:
+                              "Finish the task management app with all features.",
+                          isCompleted: false,
+                          categoryColor: Colors.blue,
+                          categoryIcon: Icons.work,
+                          onTap: () {},
+                          onStatusChanged: (completed) {},
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(

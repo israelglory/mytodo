@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../cores.dart';
+
 class TaskTile extends StatelessWidget {
   final String taskName;
   final String dateTime;
@@ -168,13 +170,11 @@ class TaskTile extends StatelessWidget {
                           color: Colors.grey.shade600,
                         ),
                         SizedBox(width: 4.w),
-                        Text(
+                        AppText(
                           dateTime,
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          fontSize: 12.sp,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w400,
                         ),
                       ],
                     ),
@@ -182,18 +182,17 @@ class TaskTile extends StatelessWidget {
                     // Description
                     if (description.isNotEmpty) ...[
                       SizedBox(height: 8.h),
-                      Text(
+                      AppText(
                         description,
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          color: isCompleted
-                              ? Colors.grey.shade400
-                              : Colors.grey.shade700,
-                          height: 1.4,
-                          decoration: isCompleted
-                              ? TextDecoration.lineThrough
-                              : null,
-                        ),
+
+                        fontSize: 12.sp,
+                        color: isCompleted
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade700,
+                        height: 1.4,
+                        textDecoration: isCompleted
+                            ? TextDecoration.lineThrough
+                            : null,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -208,23 +207,3 @@ class TaskTile extends StatelessWidget {
     );
   }
 }
-
-// Usage example:
-/*
-TaskTile(
-  taskName: "Complete Flutter project",
-  dateTime: "Today, 2:30 PM",
-  category: "Work",
-  description: "Finish the task management app with all required features including notifications and data persistence.",
-  isCompleted: false,
-  categoryColor: Colors.blue,
-  categoryIcon: Icons.work,
-  onTap: () {
-    // Handle task tap
-  },
-  onStatusChanged: (value) {
-    // Handle status change
-    print("Task completed: $value");
-  },
-)
-*/
