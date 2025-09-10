@@ -1,3 +1,5 @@
+import 'package:mytodo/core/di/locator.dart';
+
 class Task {
   final String id;
   final String title;
@@ -13,6 +15,7 @@ class Task {
   final String? reminderTime; // Time before due date to remind
   final String? assignedTo;
   final String? projectId;
+  final String createdBy;
 
   Task({
     required this.id,
@@ -29,7 +32,8 @@ class Task {
     this.reminderTime,
     this.assignedTo,
     this.projectId,
-  }) : createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       createdBy = appGlobals.user!.email;
 
   // Copy with method for updating task properties
   Task copyWith({

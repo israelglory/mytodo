@@ -58,7 +58,7 @@ class BottomNavigationView extends StatelessWidget {
               ],
               handleAndroidBackButtonPress: true,
               resizeToAvoidBottomInset: false,
-              stateManagement: true,
+              stateManagement: false,
               hideNavigationBarWhenKeyboardAppears: true,
               popBehaviorOnSelectedNavBarItemPress: PopBehavior.once,
               // hideOnScrollSettings: HideOnScrollSettings(
