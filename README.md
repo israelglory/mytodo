@@ -10,6 +10,10 @@ An Assesment task that serves as a todo list to track everyday activities. A pus
 - Any IDE with SDK installed (ie. IntelliJ, Android Studio, VSCode etc)
 - A little knowledge of Flutter
 
+## 🎬 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/OK74VBVgZAw/0.jpg)](https://youtu.be/OK74VBVgZAw)
+
 ## 📸 ScreenShots
 
  <img src="assets/ss/1.png" width="400">   <img src="assets/ss/2.png" width="400"> 
