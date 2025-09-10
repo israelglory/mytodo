@@ -36,10 +36,6 @@ mytodo/
 └── README.md
 ```
 
-
-
-```
-
 ## 🏗️ Approach and Assumptions
 
 ### 📱 **Simulating Login and Sign Up**
