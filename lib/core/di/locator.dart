@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mytodo/core/services/dialog_service.dart';
+import 'package:mytodo/data/repo/auth_repository.dart';
+import 'package:mytodo/data/repo/task_repository.dart';
 
 import 'package:mytodo/data/repo/user_repo.dart';
 
@@ -26,6 +28,9 @@ Future<void> setupLocator() async {
   //REPOS
 
   locator.registerLazySingleton(() => UserRepo());
+
+  locator.registerLazySingleton(() => AuthRepository());
+  locator.registerLazySingleton(() => TaskRepository());
 }
 
 //GLOBALS
@@ -44,3 +49,5 @@ AppLocalStorage appLocalStorage = locator.get<AppLocalStorage>();
 //REPOS
 
 UserRepo userRepo = locator.get<UserRepo>();
+AuthRepository authRepository = locator.get<AuthRepository>();
+TaskRepository taskRepository = locator.get<TaskRepository>();

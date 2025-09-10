@@ -48,14 +48,6 @@ class AuthLocalStorage {
     _localStorageService.save(StorageKeys.loginPin, value);
   }
 
-  void saveTransactionPin(String? value) {
-    _localStorageService.save(StorageKeys.transactionPin, value);
-  }
-
-  String? getTransactionPin() {
-    return _localStorageService.getString(StorageKeys.transactionPin);
-  }
-
   String? getLoginPin() {
     return _localStorageService.getString(StorageKeys.loginPin);
   }

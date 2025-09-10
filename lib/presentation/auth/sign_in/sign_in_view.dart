@@ -182,7 +182,9 @@ class SignInView extends StatelessWidget {
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.w600,
                                   onPress: () {
-                                    navigationService.push(SignUpView());
+                                    navigationService.pushReplacement(
+                                      SignUpView(),
+                                    );
                                   },
                                   isTextButton: true,
                                 ),

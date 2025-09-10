@@ -17,12 +17,14 @@ class AppGlobals extends ChangeNotifier {
   String? subscriptionPlan;
   bool? isBiometricEnabled;
   DateTime? _tokenExpiry;
+  List<User>? _allUsers;
 
   Future<void> init() async {
     _token = authLocalStorage.getToken();
     _refreshToken = authLocalStorage.getRefreshToken();
     _user = appLocalStorage.getUser();
     _tokenExpiry = authLocalStorage.getTokenExpiry();
+    _allUsers = appLocalStorage.getAllUsers();
 
     _notificationToken = appLocalStorage.getNotificationToken();
     isBiometricEnabled = authLocalStorage.getBiometrics();
@@ -30,6 +32,11 @@ class AppGlobals extends ChangeNotifier {
 
   set token(String? value) {
     _token = value;
+    notifyListeners();
+  }
+
+  set allUsers(List<User> value) {
+    _allUsers = value;
     notifyListeners();
   }
 
@@ -78,4 +85,5 @@ class AppGlobals extends ChangeNotifier {
   String? get getSubscriptionPlan => subscriptionPlan;
   bool get isBiometricsEnabled => isBiometricEnabled ?? false;
   bool get isAndroid => Platform.isAndroid;
+  List<User> get allUsers => _allUsers ?? [];
 }
