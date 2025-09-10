@@ -100,4 +100,22 @@ class AppLocalStorage {
   User? getUser() {
     return getCurrentUser();
   }
+
+  // Task management methods
+  void saveUserTasks(String userId, List<Map<String, dynamic>> tasks) {
+    final tasksKey = 'user_tasks_$userId';
+    _localStorageService.save(tasksKey, tasks);
+  }
+
+  List<Map<String, dynamic>>? getUserTasks(String userId) {
+    final tasksKey = 'user_tasks_$userId';
+    final res = _localStorageService.box.get(tasksKey);
+    if (res == null) return null;
+    return List<Map<String, dynamic>>.from(res);
+  }
+
+  void deleteUserTasks(String userId) {
+    final tasksKey = 'user_tasks_$userId';
+    _localStorageService.box.delete(tasksKey);
+  }
 }

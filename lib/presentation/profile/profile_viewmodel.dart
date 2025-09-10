@@ -6,10 +6,12 @@ import 'package:stacked/stacked.dart';
 import '../../core/cores.dart';
 import '../../data/model/model.dart';
 import '../../data/repo/auth_repository.dart';
+import '../../data/repo/task_repository.dart';
 import '../auth/sign_in/sign_in_view.dart';
 
 class ProfileViewModel extends BaseViewModel {
   final _authRepository = AuthRepository();
+  final _taskRepository = TaskRepository();
 
   bool isBiometricsEnabled = appGlobals.isBiometricsEnabled;
 
@@ -59,6 +61,10 @@ class ProfileViewModel extends BaseViewModel {
 
       // Set the new user as current
       authRepository.switchUser(userWithoutPassword);
+
+      // Refresh tasks for the new user
+      await _taskRepository.onUserSwitched();
+
       notifyListeners();
 
       // Show success message

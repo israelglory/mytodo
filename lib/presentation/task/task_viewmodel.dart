@@ -1,174 +1,162 @@
+import 'dart:developer';
+
 import 'package:mytodo/data/model/params/tasks/tasks_param.dart';
+import 'package:mytodo/data/repo/task_repository.dart';
 import 'package:stacked/stacked.dart';
 
 class TaskViewModel extends BaseViewModel {
-  List<Task> tasks = [
-    Task(
-      id: '1',
-      title: 'Complete Flutter project',
-      description:
-          'Finish the task management app with all required features including notifications and data persistence.',
-      dueDate: DateTime.now().add(const Duration(hours: 3)),
-      category: 'Work',
-      priority: Priority.high,
-      tags: ['flutter', 'mobile', 'deadline'],
-      notes: 'Focus on UI improvements and testing',
-      isCompleted: false,
-    ),
-    Task(
-      id: '2',
-      title: 'Grocery Shopping',
-      description:
-          'Buy vegetables, fruits, milk, bread, and other essentials for the week.',
-      dueDate: DateTime.now().add(const Duration(days: 1, hours: 2)),
-      category: 'Personal',
-      priority: Priority.medium,
-      tags: ['shopping', 'food'],
-      isCompleted: false,
-    ),
-    Task(
-      id: '3',
-      title: 'Team Meeting',
-      description:
-          'Weekly standup meeting to discuss project progress and upcoming milestones.',
-      dueDate: DateTime.now().add(const Duration(hours: 1)),
-      category: 'Work',
-      priority: Priority.urgent,
-      tags: ['meeting', 'team', 'standup'],
-      notes: 'Prepare status report',
-      isCompleted: false,
-    ),
-    Task(
-      id: '4',
-      title: 'Exercise - Morning Run',
-      description:
-          'Go for a 5km morning run in the park. Focus on maintaining steady pace.',
-      dueDate: DateTime.now().add(const Duration(days: 1, hours: -2)),
-      category: 'Health',
-      priority: Priority.medium,
-      tags: ['exercise', 'running', 'health'],
-      isCompleted: true,
-      completedAt: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    Task(
-      id: '5',
-      title: 'Read Chapter 5',
-      description:
-          'Read and take notes on Chapter 5 of "Clean Architecture" book.',
-      dueDate: DateTime.now().add(const Duration(days: 2)),
-      category: 'Learning',
-      priority: Priority.low,
-      tags: ['reading', 'architecture', 'learning'],
-    ),
-    Task(
-      id: '6',
-      title: 'Doctor Appointment',
-      description: 'Annual health checkup appointment with Dr. Smith.',
-      dueDate: DateTime.now().add(const Duration(days: 3, hours: 2)),
-      category: 'Health',
-      priority: Priority.high,
-      tags: ['health', 'appointment', 'checkup'],
-      notes: 'Bring insurance card and previous reports',
-      isCompleted: false,
-    ),
-    Task(
-      id: '7',
-      title: 'Code Review',
-      description:
-          'Review pull requests from team members and provide feedback.',
-      dueDate: DateTime.now().subtract(const Duration(hours: 1)),
-      category: 'Work',
-      priority: Priority.urgent,
-      tags: ['code-review', 'development'],
-      isCompleted: false,
-      notes: 'Focus on security and performance',
-    ),
-    Task(
-      id: '8',
-      title: 'Plan Weekend Trip',
-      description:
-          'Plan and book accommodation for weekend getaway to the mountains.',
-      dueDate: DateTime.now().add(const Duration(days: 5)),
-      category: 'Personal',
-      priority: Priority.low,
-      tags: ['travel', 'planning', 'weekend'],
-      isCompleted: false,
-    ),
-    Task(
-      id: '9',
-      title: 'Update Resume',
-      description:
-          'Update resume with recent projects and skills. Review and polish formatting.',
-      dueDate: DateTime.now().add(const Duration(days: 7)),
-      category: 'Career',
-      priority: Priority.medium,
-      tags: ['resume', 'career', 'update'],
-      isCompleted: false,
-    ),
-    Task(
-      id: '10',
-      title: 'Water Plants',
-      description:
-          'Water all indoor and outdoor plants. Check for any signs of pests or disease.',
-      dueDate: DateTime.now().add(const Duration(hours: 6)),
-      category: 'Home',
-      priority: Priority.low,
-      tags: ['plants', 'gardening', 'maintenance'],
-      isCompleted: false,
-    ),
-  ];
-  bool isCompleted = false;
+  final TaskRepository _taskRepository = TaskRepository();
+
+  List<Task> _tasks = [];
+  List<Task> get tasks => _tasks;
+
   int selectedIndex = 0;
-  void toggleCompleted(bool value) {
-    isCompleted = value;
-    notifyListeners();
+
+  void initialise() {
+    loadCurrentUserTasks();
+  }
+
+  // Load tasks for current user
+  void loadCurrentUserTasks() {
+    setBusy(true);
+    try {
+      _tasks = _taskRepository.getCurrentUserTasks();
+      notifyListeners();
+    } catch (e) {
+      log('Error loading tasks: $e');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  Future<void> refreshTasks() async {
+    await _taskRepository.onUserSwitched();
+    loadCurrentUserTasks();
   }
 
   List<Task> getTasksByCategory(String category) {
-    switch (category) {
-      case 'Work':
-        return tasks.where((task) => task.category == 'Work').toList();
-      case 'Personal':
-        return tasks.where((task) => task.category == 'Personal').toList();
-      case 'Health':
-        return tasks.where((task) => task.category == 'Health').toList();
-      case 'Learning':
-        return tasks.where((task) => task.category == 'Learning').toList();
-      case 'Career':
-        return tasks.where((task) => task.category == 'Career').toList();
-      case 'Home':
-        return tasks.where((task) => task.category == 'Home').toList();
-      default:
-        return tasks;
-    }
+    return _taskRepository.getTasksByCategory(category);
   }
 
   List<Task> getTasksByStatus(String status) {
-    switch (status) {
-      case 'ongoing':
-        return tasks.where((task) => !task.isCompleted).toList();
-      case 'completed':
-        return tasks.where((task) => task.isCompleted).toList();
-      default:
-        return tasks;
+    return _taskRepository.getTasksByStatus(status);
+  }
+
+  Future<void> toggleTaskStatus(String taskId, bool isCompleted) async {
+    setBusy(true);
+    try {
+      final success = await _taskRepository.toggleTaskCompletion(taskId);
+      if (success) {
+        loadCurrentUserTasks();
+        Future.delayed(const Duration(milliseconds: 300), () {
+          notifyListeners();
+        });
+      }
+    } catch (e) {
+      log('Error toggling task status: $e');
+    } finally {
+      setBusy(false);
     }
   }
 
-  void toggleTaskStatus(String taskId, bool isCompleted) {
-    final taskIndex = tasks.indexWhere((task) => task.id == taskId);
-    if (taskIndex != -1) {
-      tasks[taskIndex] = tasks[taskIndex].copyWith(
-        isCompleted: isCompleted,
-        completedAt: isCompleted ? DateTime.now() : null,
+  // Create new task
+  Future<Task?> createTask({
+    required String title,
+    required String description,
+    required DateTime dueDate,
+    required String category,
+    Priority priority = Priority.medium,
+    String? notes,
+    List<String> tags = const [],
+    String? reminderTime,
+  }) async {
+    setBusy(true);
+    try {
+      final task = await _taskRepository.createTask(
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        category: category,
+        priority: priority,
+        notes: notes,
+        tags: tags,
+        reminderTime: reminderTime,
       );
-      Future.delayed(const Duration(milliseconds: 300), () {
-        notifyListeners();
-      });
+
+      if (task != null) {
+        loadCurrentUserTasks(); // Reload to show new task
+      }
+
+      return task;
+    } catch (e) {
+      print('Error creating task: $e');
+      return null;
+    } finally {
+      setBusy(false);
     }
   }
 
+  // Update existing task
+  Future<bool> updateTask(Task updatedTask) async {
+    setBusy(true);
+    try {
+      final success = await _taskRepository.updateTask(updatedTask);
+      if (success) {
+        loadCurrentUserTasks(); // Reload to show updated task
+      }
+      return success;
+    } catch (e) {
+      print('Error updating task: $e');
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Delete task
+  Future<bool> deleteTask(String taskId) async {
+    setBusy(true);
+    try {
+      final success = await _taskRepository.deleteTask(taskId);
+      if (success) {
+        loadCurrentUserTasks(); // Reload to remove deleted task
+      }
+      return success;
+    } catch (e) {
+      print('Error deleting task: $e');
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // Search tasks
+  List<Task> searchTasks(String query) {
+    return _taskRepository.searchTasks(query);
+  }
+
+  // Get task statistics
+  Map<String, int> getTaskStatistics() {
+    return _taskRepository.getTaskStatistics();
+  }
+
+  // Called when user switches accounts
+  void onUserSwitched() {
+    _tasks.clear();
+    loadCurrentUserTasks();
+  }
+
+  // Set selected tab index
   void setSelectedIndex(int index) {
     selectedIndex = index;
     notifyListeners();
+  }
+
+  // Get item count for AnimatedList
+  int getItemCount() {
+    final statusTasks = getTasksByStatus(
+      selectedIndex == 0 ? 'ongoing' : 'completed',
+    );
+    return statusTasks.length;
   }
 }

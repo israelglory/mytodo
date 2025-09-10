@@ -61,10 +61,7 @@ class BottomNavigationView extends StatelessWidget {
               stateManagement: false,
               hideNavigationBarWhenKeyboardAppears: true,
               popBehaviorOnSelectedNavBarItemPress: PopBehavior.once,
-              // hideOnScrollSettings: HideOnScrollSettings(
-              //   hideNavBarOnScroll: true,
 
-              // ),
               padding: const EdgeInsets.only(top: 8),
 
               onWillPop: (final context) async {

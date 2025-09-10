@@ -182,7 +182,7 @@ class CreateTaskView extends StatelessWidget {
                     width: double.infinity,
                     child: AppButton(
                       onPressed: model.canCreateTask
-                          ? () => model.createTask(context)
+                          ? () => model.createTask()
                           : null,
                       child: const AppText(
                         "Create Task",

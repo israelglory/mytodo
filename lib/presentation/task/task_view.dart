@@ -12,6 +12,7 @@ class TaskView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskViewModel>.reactive(
       viewModelBuilder: () => TaskViewModel(),
+      onViewModelReady: (model) => model.initialise(),
       builder: (context, model, child) {
         return Scaffold(
           body: Padding(
@@ -88,44 +89,69 @@ class TaskView extends StatelessWidget {
                   height: 24,
                 ),
                 Expanded(
-                  child: ListView.separated(
-                    itemCount: model
-                        .getTasksByStatus(
-                          model.selectedIndex == 0 ? 'ongoing' : "completed",
-                        )
-                        .length,
-                    itemBuilder: (context, index) {
-                      final task = model.getTasksByStatus(
-                        model.selectedIndex == 0 ? 'ongoing' : "completed",
-                      )[index];
-                      return TaskTile(
-                        taskName: task.title,
-                        dateTime: task.formattedDueDate.toString(),
-                        category: task.category,
-                        description: task.description,
+                  child: Builder(
+                    builder: (context) {
+                      if (model
+                          .getTasksByStatus(
+                            model.selectedIndex == 0 ? 'ongoing' : "completed",
+                          )
+                          .isEmpty) {
+                        return Center(
+                          child: AppText(
+                            "No tasks available, Create New Task",
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        );
+                      }
+                      return ListView.separated(
+                        itemCount: model
+                            .getTasksByStatus(
+                              model.selectedIndex == 0
+                                  ? 'ongoing'
+                                  : "completed",
+                            )
+                            .length,
+                        itemBuilder: (context, index) {
+                          final task = model.getTasksByStatus(
+                            model.selectedIndex == 0 ? 'ongoing' : "completed",
+                          )[index];
+                          return TaskTile(
+                            taskName: task.title,
+                            dateTime: task.formattedDueDate.toString(),
+                            category: task.category,
+                            description: task.description,
 
-                        isCompleted: task.isCompleted,
-                        categoryColor: Colors.blue,
-                        categoryIcon: Icons.work,
-                        onTap: () {},
-                        onStatusChanged: (completed) {
-                          model.toggleTaskStatus(task.id, completed ?? false);
+                            isCompleted: task.isCompleted,
+                            categoryColor: Colors.blue,
+                            categoryIcon: Icons.work,
+                            onTap: () {},
+                            onStatusChanged: (completed) {
+                              model.toggleTaskStatus(
+                                task.id,
+                                completed ?? false,
+                              );
+                            },
+                          );
                         },
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: 16,
+                        ),
                       );
                     },
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 16,
-                    ),
                   ),
                 ),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            heroTag: "task_fab",
             onPressed: () {
-              navigationService.push(
-                CreateTaskView(),
-              );
+              navigationService
+                  .push(
+                    CreateTaskView(),
+                  )
+                  .then((_) => model.initialise());
             },
             backgroundColor: AppColors.primaryColor,
             elevation: 2,
