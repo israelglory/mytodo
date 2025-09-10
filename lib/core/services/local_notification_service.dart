@@ -70,7 +70,6 @@ class LocalNotificationService {
   }
 
   void _onNotificationTapped(NotificationResponse notificationResponse) {
-    // Handle notification tap if needed
     log('Notification tapped: ${notificationResponse.payload}');
   }
 
