@@ -39,6 +39,8 @@ mytodo/
 ## ⚡ Functionality
 
 - Add, edit, and delete todo items
+- Long Press to Edit and Delete task
+- Categorize tasks based on their categories
 - Multiuser
 - Mark tasks as completed or pending
 - View all tasks in a list
