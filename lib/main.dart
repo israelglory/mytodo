@@ -21,6 +21,10 @@ Future<void> main() async {
   await LocalStorageService.init();
   await AppGlobals.instance.init();
 
+  // Initialize local notifications via DI
+  await localNotificationService.initialize();
+  await localNotificationService.requestPermissions();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   //final notificationService = NotificationService();

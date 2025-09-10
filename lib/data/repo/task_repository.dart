@@ -1,9 +1,12 @@
 import 'package:mytodo/core/di/locator.dart';
 import 'package:mytodo/data/datasources/local/app_local_storage.dart';
 import 'package:mytodo/data/model/params/tasks/tasks_param.dart';
+import 'package:mytodo/core/services/local_notification_service.dart';
 
 class TaskRepository {
   final AppLocalStorage _localStorage = appLocalStorage;
+  final LocalNotificationService _notificationService =
+      localNotificationService;
 
   // Get current user's tasks
   List<Task> getCurrentUserTasks() {
@@ -71,6 +74,9 @@ class TaskRepository {
     currentTasks.add(task);
     await saveCurrentUserTasks(currentTasks);
 
+    // Schedule notification reminder (2 minutes before due date)
+    await _notificationService.scheduleTaskReminder(task);
+
     return task;
   }
 
@@ -95,6 +101,12 @@ class TaskRepository {
     currentTasks[taskIndex] = updatedTask;
     await saveCurrentUserTasks(currentTasks);
 
+    // Cancel old reminder and schedule new one if task is not completed
+    await _notificationService.cancelTaskReminder(updatedTask.id);
+    if (!updatedTask.isCompleted) {
+      await _notificationService.scheduleTaskReminder(updatedTask);
+    }
+
     return true;
   }
 
@@ -114,6 +126,9 @@ class TaskRepository {
       print('Cannot delete task: Task does not belong to current user');
       return false;
     }
+
+    // Cancel notification reminder before deleting
+    await _notificationService.cancelTaskReminder(taskToDelete.id);
 
     currentTasks.removeAt(taskIndex);
     await saveCurrentUserTasks(currentTasks);
@@ -146,6 +161,15 @@ class TaskRepository {
 
     currentTasks[taskIndex] = updatedTask;
     await saveCurrentUserTasks(currentTasks);
+
+    // Handle notification reminders based on completion status
+    if (updatedTask.isCompleted) {
+      // Cancel reminder when task is completed
+      await _notificationService.cancelTaskReminder(updatedTask.id);
+    } else {
+      // Reschedule reminder when task is unchecked
+      await _notificationService.scheduleTaskReminder(updatedTask);
+    }
 
     return true;
   }
@@ -221,8 +245,16 @@ class TaskRepository {
     final currentUser = appGlobals.user;
     if (currentUser == null) return;
 
-    // Tasks are automatically loaded by getCurrentUserTasks()
-    // This method exists for potential future cache invalidation
+    // Cancel all notifications for previous user
+    await _notificationService.cancelAllNotifications();
+
+    // Reschedule notifications for new user's tasks
+    final newUserTasks = getCurrentUserTasks();
+    for (final task in newUserTasks) {
+      if (!task.isCompleted) {
+        await _notificationService.scheduleTaskReminder(task);
+      }
+    }
   }
 
   // Cleanup tasks for deleted user (optional utility method)

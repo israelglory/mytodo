@@ -30,7 +30,7 @@ class HomeHeader extends StatelessWidget {
                 ),
                 Flexible(
                   child: AppText(
-                    toBeginningOfSentenceCase("Glory"),
+                    toBeginningOfSentenceCase(appGlobals.user?.username ?? ''),
                     fontSize: 16,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

@@ -197,7 +197,10 @@ class ProfileView extends StatelessWidget {
                   _ProfileListTile(
                     icon: Icons.document_scanner,
                     title: 'Terms of use',
-                    onTap: () {},
+                    onTap: () async {
+                      await localNotificationService
+                          .showImmediateTestNotification();
+                    },
                   ),
                   Divider(),
                   _ProfileListTile(

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:mytodo/core/services/dialog_service.dart';
+import 'package:mytodo/core/services/local_notification_service.dart';
 import 'package:mytodo/data/repo/auth_repository.dart';
 import 'package:mytodo/data/repo/task_repository.dart';
 
@@ -16,6 +17,9 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<BottomSheetService>(() => BottomSheetService());
   locator.registerLazySingleton<ImagePickerService>(() => ImagePickerService());
   locator.registerLazySingleton<DialogService>(() => DialogService());
+  locator.registerLazySingleton<LocalNotificationService>(
+    () => LocalNotificationService(),
+  );
 
   //STORAGES
   locator.registerLazySingleton(() => AuthLocalStorage());
@@ -37,6 +41,8 @@ SnackbarService snackbarService = locator.get<SnackbarService>();
 BottomSheetService bottomSheetService = locator.get<BottomSheetService>();
 ImagePickerService imageService = locator.get<ImagePickerService>();
 DialogService dialogService = locator.get<DialogService>();
+LocalNotificationService localNotificationService = locator
+    .get<LocalNotificationService>();
 
 //STORAGES
 AuthLocalStorage authLocalStorage = locator.get<AuthLocalStorage>();
