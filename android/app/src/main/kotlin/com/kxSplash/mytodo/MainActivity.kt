@@ -1,4 +1,4 @@
-package com.app.mytodo
+package com.kxSplash.mytodo
 
 import io.flutter.embedding.android.FlutterActivity
 
