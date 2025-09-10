@@ -11,7 +11,9 @@ An Assesment task that serves as a todo list to track everyday activities. A pus
 
 ## 🎬 Demo Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/OK74VBVgZAw" title="Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Demo Video]] https://www.youtube.com/watch?v=OK74VBVgZAw
+
+*Click the link above to watch the demo video*
 
 ## 📸 ScreenShots
 
