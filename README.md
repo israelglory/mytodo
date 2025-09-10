@@ -1,8 +1,7 @@
-# My Todo🔥 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![Twitter Follow](https://img.shields.io/x/follow/kxSplash?style=social)](https://x.com/kxSplash)
+# My Todo🔥 
 
 An Assesment task that serves as a todo list to track everyday activities. A push Notification to remind the user of the task.
 
-[![Twitter Follow](https://img.shields.io/x/follow/kxSplash?style=social)](https://x.com/kxSplash)
 
 ## ✨ Requirements
 
@@ -12,7 +11,7 @@ An Assesment task that serves as a todo list to track everyday activities. A pus
 
 ## 🎬 Demo Video
 
-[![Watch the demo](https://img.youtube.com/vi/OK74VBVgZAw/0.jpg)](https://youtu.be/OK74VBVgZAw)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OK74VBVgZAw" title="Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## 📸 ScreenShots
 
