@@ -11,6 +11,8 @@ class TaskTile extends StatelessWidget {
   final bool isCompleted;
   final VoidCallback? onTap;
   final ValueChanged<bool?>? onStatusChanged;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
   final Color? categoryColor;
   final IconData? categoryIcon;
 
@@ -23,6 +25,8 @@ class TaskTile extends StatelessWidget {
     required this.isCompleted,
     this.onTap,
     this.onStatusChanged,
+    this.onEdit,
+    this.onDelete,
     this.categoryColor,
     this.categoryIcon,
   });
@@ -51,6 +55,7 @@ class TaskTile extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
+        onLongPress: () => _showTaskOptions(context),
         borderRadius: BorderRadius.circular(16.r),
         child: Padding(
           padding: EdgeInsets.all(16.w),
@@ -203,6 +208,137 @@ class TaskTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showTaskOptions(BuildContext context) {
+    if (onEdit == null && onDelete == null) return;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              margin: EdgeInsets.only(top: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            SizedBox(height: 20),
+
+            // Task name
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: AppText(
+                taskName,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                alignment: TextAlign.center,
+              ),
+            ),
+
+            SizedBox(height: 24),
+
+            // Options
+            if (onEdit != null)
+              ListTile(
+                leading: Icon(
+                  Icons.edit_outlined,
+                  color: Colors.blue,
+                ),
+                title: AppText(
+                  'Edit Task',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  onEdit?.call();
+                },
+              ),
+
+            if (onDelete != null)
+              ListTile(
+                leading: Icon(
+                  Icons.delete_outline,
+                  color: Colors.red,
+                ),
+                title: AppText(
+                  'Delete Task',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteConfirmation(context);
+                },
+              ),
+
+            SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: AppText(
+          'Delete Task',
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        content: AppText(
+          'Are you sure you want to delete "$taskName"? This action cannot be undone.',
+          fontSize: 14,
+          color: Colors.grey.shade700,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: AppText(
+              'Cancel',
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onDelete?.call();
+            },
+            child: AppText(
+              'Delete',
+              fontSize: 14,
+              color: Colors.red,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

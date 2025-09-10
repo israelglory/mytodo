@@ -133,6 +133,8 @@ class HomeView extends StatelessWidget {
                                   completed ?? false,
                                 );
                               },
+                              onEdit: () => model.editTask(task),
+                              onDelete: () => model.deleteTaskWithConfirmation(task),
                             ),
                           ),
                       ],

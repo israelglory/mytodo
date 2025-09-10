@@ -5,17 +5,19 @@ import 'package:stacked/stacked.dart';
 import 'create_task_viewmodel.dart';
 
 class CreateTaskView extends StatelessWidget {
-  const CreateTaskView({super.key});
+  final Task? task;
+  const CreateTaskView({super.key, this.task});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CreateTaskViewModel>.reactive(
       viewModelBuilder: () => CreateTaskViewModel(),
+      onViewModelReady: (model) => model.initializeWithTask(task),
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(
-            title: const AppText(
-              "Create Task",
+            title: AppText(
+              task != null ? "Edit Task" : "Create Task",
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
@@ -135,44 +137,42 @@ class CreateTaskView extends StatelessWidget {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      ...Priority.values
-                          .map(
-                            (priority) => Expanded(
-                              child: GestureDetector(
-                                onTap: () => model.setPriority(priority),
-                                child: Container(
-                                  margin: const EdgeInsets.only(right: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: model.selectedPriority == priority
-                                        ? Color(
-                                            priority.colorValue,
-                                          ).withOpacity(0.2)
-                                        : Colors.grey.shade100,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: model.selectedPriority == priority
-                                          ? Color(priority.colorValue)
-                                          : Colors.grey.shade300,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: AppText(
-                                      priority.displayName,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: model.selectedPriority == priority
-                                          ? Color(priority.colorValue)
-                                          : Colors.grey.shade700,
-                                    ),
-                                  ),
+                      ...Priority.values.map(
+                        (priority) => Expanded(
+                          child: GestureDetector(
+                            onTap: () => model.setPriority(priority),
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: model.selectedPriority == priority
+                                    ? Color(
+                                        priority.colorValue,
+                                      ).withOpacity(0.2)
+                                    : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: model.selectedPriority == priority
+                                      ? Color(priority.colorValue)
+                                      : Colors.grey.shade300,
+                                ),
+                              ),
+                              child: Center(
+                                child: AppText(
+                                  priority.displayName,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: model.selectedPriority == priority
+                                      ? Color(priority.colorValue)
+                                      : Colors.grey.shade700,
                                 ),
                               ),
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -182,10 +182,12 @@ class CreateTaskView extends StatelessWidget {
                     width: double.infinity,
                     child: AppButton(
                       onPressed: model.canCreateTask
-                          ? () => model.createTask()
+                          ? () => task != null
+                                ? model.updateTask(task!)
+                                : model.createTask()
                           : null,
-                      child: const AppText(
-                        "Create Task",
+                      child: AppText(
+                        task != null ? "Update Task" : "Create Task",
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),

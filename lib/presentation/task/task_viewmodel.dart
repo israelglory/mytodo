@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:mytodo/core/di/locator.dart';
 import 'package:mytodo/data/model/params/tasks/tasks_param.dart';
 import 'package:mytodo/data/repo/task_repository.dart';
+import 'package:mytodo/presentation/task/create_task/create_task_view.dart';
 import 'package:stacked/stacked.dart';
 
 class TaskViewModel extends BaseViewModel {
@@ -89,7 +91,7 @@ class TaskViewModel extends BaseViewModel {
 
       return task;
     } catch (e) {
-      print('Error creating task: $e');
+      log('Error creating task: $e');
       return null;
     } finally {
       setBusy(false);
@@ -106,7 +108,7 @@ class TaskViewModel extends BaseViewModel {
       }
       return success;
     } catch (e) {
-      print('Error updating task: $e');
+      log('Error updating task: $e');
       return false;
     } finally {
       setBusy(false);
@@ -123,7 +125,7 @@ class TaskViewModel extends BaseViewModel {
       }
       return success;
     } catch (e) {
-      print('Error deleting task: $e');
+      log('Error deleting task: $e');
       return false;
     } finally {
       setBusy(false);
@@ -158,5 +160,24 @@ class TaskViewModel extends BaseViewModel {
       selectedIndex == 0 ? 'ongoing' : 'completed',
     );
     return statusTasks.length;
+  }
+
+  // Edit task - navigate to edit view
+  void editTask(Task task) {
+    navigationService
+        .push(
+          CreateTaskView(task: task),
+        )
+        .then((_) => loadCurrentUserTasks());
+  }
+
+  // Delete task with confirmation
+  Future<void> deleteTaskWithConfirmation(Task task) async {
+    final success = await deleteTask(task.id);
+    if (success) {
+      snackbarService.success(message: 'Task deleted successfully');
+    } else {
+      snackbarService.error(message: 'Failed to delete task');
+    }
   }
 }

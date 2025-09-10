@@ -121,7 +121,6 @@ class TaskView extends StatelessWidget {
                             dateTime: task.formattedDueDate.toString(),
                             category: task.category,
                             description: task.description,
-
                             isCompleted: task.isCompleted,
                             categoryColor: Colors.blue,
                             categoryIcon: Icons.work,
@@ -132,6 +131,9 @@ class TaskView extends StatelessWidget {
                                 completed ?? false,
                               );
                             },
+                            onEdit: () => model.editTask(task),
+                            onDelete: () =>
+                                model.deleteTaskWithConfirmation(task),
                           );
                         },
                         separatorBuilder: (context, index) => SizedBox(

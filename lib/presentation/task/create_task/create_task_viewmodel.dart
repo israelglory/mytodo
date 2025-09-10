@@ -20,6 +20,24 @@ class CreateTaskViewModel extends BaseViewModel {
   Priority selectedPriority = Priority.medium;
   List<String> _tags = [];
 
+  // Initialize with existing task data if editing
+  void initializeWithTask(Task? task) {
+    if (task != null) {
+      taskTitleController.text = task.title;
+      taskDescriptionController.text = task.description;
+      categoryController.text = task.category;
+      notesController.text = task.notes ?? '';
+      selectedDate = task.dueDate;
+      selectedTime = TimeOfDay(
+        hour: task.dueDate.hour,
+        minute: task.dueDate.minute,
+      );
+      selectedPriority = task.priority;
+      _tags = List.from(task.tags);
+      notifyListeners();
+    }
+  }
+
   // Getters
   bool get canCreateTask {
     return taskTitleController.text.isNotEmpty &&
@@ -132,6 +150,39 @@ class CreateTaskViewModel extends BaseViewModel {
     selectedPriority = Priority.medium;
     _tags.clear();
     notifyListeners();
+  }
+
+  Future<bool> updateTask(Task task) async {
+    if (!canCreateTask) return false;
+
+    setBusy(true);
+    try {
+      final updatedTask = task.copyWith(
+        title: taskTitleController.text.trim(),
+        description: taskDescriptionController.text.trim(),
+        category: categoryController.text.trim(),
+        dueDate: combinedDateTime!,
+        priority: selectedPriority,
+        notes: notesController.text.trim().isEmpty
+            ? null
+            : notesController.text.trim(),
+        tags: _tags,
+      );
+
+      final success = await _taskRepository.updateTask(updatedTask);
+
+      if (success) {
+        navigationService.pop();
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      log('Error updating task: $e');
+      return false;
+    } finally {
+      setBusy(false);
+    }
   }
 
   @override
