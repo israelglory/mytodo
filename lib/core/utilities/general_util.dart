@@ -3,23 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pinput/pinput.dart';
 
 import '../cores.dart';
-
-final defaultPinTheme = PinTheme(
-  width: 66,
-  height: 66,
-  textStyle: const TextStyle(
-    fontSize: 22,
-    color: Color.fromRGBO(30, 60, 87, 1),
-  ),
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(10),
-    color: Colors.white,
-    border: Border.all(color: AppColors.appGrey),
-  ),
-);
 
 void handleDeviceError(dynamic error, [StackTrace? stackTrace]) {
   String errorMessage;
@@ -99,5 +84,45 @@ class DateFormatter {
     } catch (e) {
       return isoDateString; // Fallback to original string
     }
+  }
+}
+
+// Helper method to get category color
+Color getCategoryColor(String category) {
+  switch (category.toLowerCase()) {
+    case 'work':
+      return Colors.blue;
+    case 'personal':
+      return Colors.green;
+    case 'health':
+      return Colors.red;
+    case 'learning':
+      return Colors.purple;
+    case 'career':
+      return Colors.orange;
+    case 'home':
+      return Colors.brown;
+    default:
+      return Colors.grey;
+  }
+}
+
+// Helper method to get category icon
+IconData getCategoryIcon(String category) {
+  switch (category.toLowerCase()) {
+    case 'work':
+      return Icons.work;
+    case 'personal':
+      return Icons.person;
+    case 'health':
+      return Icons.favorite;
+    case 'learning':
+      return Icons.school;
+    case 'career':
+      return Icons.trending_up;
+    case 'home':
+      return Icons.home;
+    default:
+      return Icons.task;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hive/hive.dart';
 
 import '../../../core/states/app_state.dart';
@@ -111,7 +113,16 @@ class AppLocalStorage {
     final tasksKey = 'user_tasks_$userId';
     final res = _localStorageService.box.get(tasksKey);
     if (res == null) return null;
-    return List<Map<String, dynamic>>.from(res);
+
+    try {
+      final List<dynamic> tasksList = res as List<dynamic>;
+      return tasksList
+          .map((task) => Map<String, dynamic>.from(task as Map))
+          .toList();
+    } catch (e) {
+      log('Error parsing user tasks for user $userId: $e');
+      return null;
+    }
   }
 
   void deleteUserTasks(String userId) {

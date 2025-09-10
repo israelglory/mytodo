@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mytodo/core/utilities/general_util.dart';
 import 'package:mytodo/core/widgets/task_tile.dart';
 import 'package:mytodo/presentation/home/home_viewmodel.dart';
 import 'package:mytodo/presentation/home/widgets/carousel.dart';
@@ -10,46 +11,6 @@ import '../task/create_task/create_task_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
-
-  // Helper method to get category color
-  Color _getCategoryColor(String category) {
-    switch (category.toLowerCase()) {
-      case 'work':
-        return Colors.blue;
-      case 'personal':
-        return Colors.green;
-      case 'health':
-        return Colors.red;
-      case 'learning':
-        return Colors.purple;
-      case 'career':
-        return Colors.orange;
-      case 'home':
-        return Colors.brown;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  // Helper method to get category icon
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'work':
-        return Icons.work;
-      case 'personal':
-        return Icons.person;
-      case 'health':
-        return Icons.favorite;
-      case 'learning':
-        return Icons.school;
-      case 'career':
-        return Icons.trending_up;
-      case 'home':
-        return Icons.home;
-      default:
-        return Icons.task;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +85,8 @@ class HomeView extends StatelessWidget {
                               category: task.category,
                               description: task.description,
                               isCompleted: task.isCompleted,
-                              categoryColor: _getCategoryColor(task.category),
-                              categoryIcon: _getCategoryIcon(task.category),
+                              categoryColor: getCategoryColor(task.category),
+                              categoryIcon: getCategoryIcon(task.category),
                               onTap: () {},
                               onStatusChanged: (completed) {
                                 model.toggleTaskStatus(
@@ -134,7 +95,8 @@ class HomeView extends StatelessWidget {
                                 );
                               },
                               onEdit: () => model.editTask(task),
-                              onDelete: () => model.deleteTaskWithConfirmation(task),
+                              onDelete: () =>
+                                  model.deleteTaskWithConfirmation(task),
                             ),
                           ),
                       ],

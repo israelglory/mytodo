@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mytodo/core/cores.dart';
+import 'package:mytodo/core/utilities/general_util.dart';
 import 'package:mytodo/core/widgets/task_tile.dart';
 import 'package:mytodo/presentation/task/create_task/create_task_view.dart';
 import 'package:stacked/stacked.dart';
@@ -122,8 +123,8 @@ class TaskView extends StatelessWidget {
                             category: task.category,
                             description: task.description,
                             isCompleted: task.isCompleted,
-                            categoryColor: Colors.blue,
-                            categoryIcon: Icons.work,
+                            categoryColor: getCategoryColor(task.category),
+                            categoryIcon: getCategoryIcon(task.category),
                             onTap: () {},
                             onStatusChanged: (completed) {
                               model.toggleTaskStatus(
