@@ -28,7 +28,6 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => AppGlobals.instance);
 
   //REPOS
-
   locator.registerLazySingleton(() => AuthRepository());
   locator.registerLazySingleton(() => TaskRepository());
 }
@@ -49,6 +48,5 @@ AuthLocalStorage authLocalStorage = locator.get<AuthLocalStorage>();
 AppLocalStorage appLocalStorage = locator.get<AppLocalStorage>();
 
 //REPOS
-
 AuthRepository authRepository = locator.get<AuthRepository>();
 TaskRepository taskRepository = locator.get<TaskRepository>();
